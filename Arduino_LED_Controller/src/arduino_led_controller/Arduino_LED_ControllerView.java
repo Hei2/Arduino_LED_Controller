@@ -245,11 +245,17 @@ public class Arduino_LED_ControllerView extends FrameView {
     }// </editor-fold>//GEN-END:initComponents
 
     private void reconnectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reconnectButtonActionPerformed
-        reconnectButton.setText("Reconnect");
         System.out.println("Reconnecting to the serial port.");
         Arduino_LED_ControllerApp.serialTest.close();
-        Arduino_LED_ControllerApp.serialTest.initialize();
-        disconnectButton.setEnabled(true);
+        if (Arduino_LED_ControllerApp.serialTest.initialize())
+        {
+            reconnectButton.setText("Reconnect");
+            disconnectButton.setEnabled(true);
+        }
+        else
+        {
+            updateSerialOutputTextPane("ERROR: Unable to connect to the serial port.");
+        }
     }//GEN-LAST:event_reconnectButtonActionPerformed
 
     private void disconnectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_disconnectButtonActionPerformed

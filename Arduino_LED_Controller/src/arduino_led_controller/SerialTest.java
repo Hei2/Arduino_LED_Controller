@@ -13,6 +13,7 @@ import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener; 
 import java.util.Enumeration;
 
+// This code is taken from: http://playground.arduino.cc/Interfacing/Java#.UzhMQPldVAX
 
 public class SerialTest implements SerialPortEventListener
 {
@@ -37,7 +38,8 @@ public class SerialTest implements SerialPortEventListener
     /** Default bits per second for COM port. */
     private static final int DATA_RATE = 9600;
 
-    public void initialize()
+    // Return whether or not the connection was established
+    public boolean initialize()
     {
         CommPortIdentifier portId = null;
         Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
@@ -57,11 +59,11 @@ public class SerialTest implements SerialPortEventListener
         if (portId == null)
         {
             System.out.println("Could not find COM port.");
-            return;
+            return false;
         }
         else
         {
-        System.out.println("Found the COM port.");
+            System.out.println("Found the COM port.");
         }
 
         try
@@ -83,10 +85,12 @@ public class SerialTest implements SerialPortEventListener
             // add event listeners
             serialPort.addEventListener(this);
             serialPort.notifyOnDataAvailable(true);
+            return true;
         }
         catch (Exception e)
         {
             System.err.println(e.toString());
+            return false;
         }
     }
 
@@ -128,12 +132,12 @@ public class SerialTest implements SerialPortEventListener
     {
         SerialTest main = new SerialTest();
         main.initialize();
-        Thread t=new Thread()
+        Thread t = new Thread()
         {
             public void run()
             {
-                //the following line will keep this app alive for 1000 seconds,
-                //waiting for events to occur and responding to them (printing incoming messages to console).
+                // the following line will keep this app alive for 1000 seconds,
+                // waiting for events to occur and responding to them (printing incoming messages to console).
                 try
                 {
                     Thread.sleep(1000000);
