@@ -11,6 +11,7 @@ import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent; 
 import gnu.io.SerialPortEventListener; 
+import java.io.IOException;
 import java.util.Enumeration;
 
 // This code is taken from: http://playground.arduino.cc/Interfacing/Java#.UzhMQPldVAX
@@ -37,6 +38,21 @@ public class SerialTest implements SerialPortEventListener
     private static final int TIME_OUT = 2000;
     /** Default bits per second for COM port. */
     private static final int DATA_RATE = 9600;
+    
+    // Output the byte array to the serial port. Return whether or not this
+    // succeeded
+    public boolean output(byte[] b)
+    {
+        try
+        {
+            output.write(b);
+            return true;
+        }
+        catch (IOException e)
+        {
+            return false;
+        }
+    }
 
     // Return whether or not the connection was established
     public boolean initialize()
@@ -117,8 +133,8 @@ public class SerialTest implements SerialPortEventListener
             try
             {
                 String inputLine = input.readLine();
-                System.out.println(inputLine);
-                Arduino_LED_ControllerApp.controllerView.updateSerialOutputTextPane(inputLine);
+                //System.out.println(inputLine);
+                Arduino_LED_ControllerApp.controllerView.updateSerialOutputTextPane("REC: " + inputLine);
             }
             catch (Exception e)
             {

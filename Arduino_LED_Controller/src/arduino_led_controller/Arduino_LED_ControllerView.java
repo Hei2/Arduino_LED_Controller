@@ -25,7 +25,10 @@ public class Arduino_LED_ControllerView extends FrameView {
         super(app);
 
         initComponents();
-
+        
+        // Disallow resizing of the main frame
+        this.getFrame().setResizable(false);
+        
         // status bar initialization - message timeout, idle icon and busy animation, etc
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
@@ -101,11 +104,14 @@ public class Arduino_LED_ControllerView extends FrameView {
     private void initComponents() {
 
         mainPanel = new javax.swing.JPanel();
-        reconnectButton = new javax.swing.JButton();
+        connectButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         serialOutputTextPane = new javax.swing.JTextPane();
         jTextField1 = new javax.swing.JTextField();
         disconnectButton = new javax.swing.JButton();
+        serialInputTextField = new javax.swing.JTextField();
+        sendButton = new javax.swing.JButton();
+        jTextField2 = new javax.swing.JTextField();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
@@ -120,11 +126,11 @@ public class Arduino_LED_ControllerView extends FrameView {
         mainPanel.setName("mainPanel"); // NOI18N
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(arduino_led_controller.Arduino_LED_ControllerApp.class).getContext().getResourceMap(Arduino_LED_ControllerView.class);
-        reconnectButton.setText(resourceMap.getString("reconnectButton.text")); // NOI18N
-        reconnectButton.setName("reconnectButton"); // NOI18N
-        reconnectButton.addActionListener(new java.awt.event.ActionListener() {
+        connectButton.setText(resourceMap.getString("connectButton.text")); // NOI18N
+        connectButton.setName("connectButton"); // NOI18N
+        connectButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reconnectButtonActionPerformed(evt);
+                connectButtonActionPerformed(evt);
             }
         });
 
@@ -150,6 +156,26 @@ public class Arduino_LED_ControllerView extends FrameView {
             }
         });
 
+        serialInputTextField.setText(resourceMap.getString("serialInputTextField.text")); // NOI18N
+        serialInputTextField.setEnabled(false);
+        serialInputTextField.setName("serialInputTextField"); // NOI18N
+
+        sendButton.setText(resourceMap.getString("sendButton.text")); // NOI18N
+        sendButton.setEnabled(false);
+        sendButton.setName("sendButton"); // NOI18N
+        sendButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sendButtonActionPerformed(evt);
+            }
+        });
+
+        jTextField2.setEditable(false);
+        jTextField2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextField2.setText(resourceMap.getString("jTextField2.text")); // NOI18N
+        jTextField2.setBorder(null);
+        jTextField2.setFocusable(false);
+        jTextField2.setName("jTextField2"); // NOI18N
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -157,24 +183,34 @@ public class Arduino_LED_ControllerView extends FrameView {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(serialInputTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(reconnectButton)
-                            .addComponent(disconnectButton)))
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(connectButton)
+                            .addComponent(disconnectButton)
+                            .addComponent(sendButton)))
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                .addContainerGap(166, Short.MAX_VALUE)
+                .addContainerGap(117, Short.MAX_VALUE)
+                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(serialInputTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sendButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(mainPanelLayout.createSequentialGroup()
-                        .addComponent(reconnectButton)
+                        .addComponent(connectButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(disconnectButton))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -244,25 +280,39 @@ public class Arduino_LED_ControllerView extends FrameView {
         setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void reconnectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reconnectButtonActionPerformed
+    private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
         System.out.println("Reconnecting to the serial port.");
         Arduino_LED_ControllerApp.serialTest.close();
         if (Arduino_LED_ControllerApp.serialTest.initialize())
         {
-            reconnectButton.setText("Reconnect");
+            connectButton.setText("Reconnect");
             disconnectButton.setEnabled(true);
+            sendButton.setEnabled(true);
+            serialInputTextField.setEnabled(true);
         }
         else
         {
             updateSerialOutputTextPane("ERROR: Unable to connect to the serial port.");
+            disableElements();
         }
-    }//GEN-LAST:event_reconnectButtonActionPerformed
+    }//GEN-LAST:event_connectButtonActionPerformed
 
     private void disconnectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_disconnectButtonActionPerformed
-        reconnectButton.setText("Connect");
-        Arduino_LED_ControllerApp.serialTest.close();
-        disconnectButton.setEnabled(false);
+        disableElements();
     }//GEN-LAST:event_disconnectButtonActionPerformed
+
+    private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
+        String output = serialInputTextField.getText().replace("/", "");
+        if (Arduino_LED_ControllerApp.serialTest.output((output + "/").getBytes()))
+        {
+            updateSerialOutputTextPane("SENT: " + output);
+        }
+        else
+        {
+            updateSerialOutputTextPane("ERROR: Send failure.");
+        }
+        serialInputTextField.setText("");
+    }//GEN-LAST:event_sendButtonActionPerformed
 
     public void updateSerialOutputTextPane(String s)
     {
@@ -270,14 +320,29 @@ public class Arduino_LED_ControllerView extends FrameView {
         serialOutputTextPane.setCaretPosition(serialOutputTextPane.getDocument().getLength());
     }
     
+    // Allow for disabling the form during a disconnect/failed connection from
+    // multiple methods
+    private void disableElements()
+    {
+        connectButton.setText("Connect");
+        Arduino_LED_ControllerApp.serialTest.close();
+        disconnectButton.setEnabled(false);
+        sendButton.setEnabled(false);
+        serialInputTextField.setEnabled(false);
+        updateSerialOutputTextPane("DISCONNECTED");
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton connectButton;
     private javax.swing.JButton disconnectButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JProgressBar progressBar;
-    private javax.swing.JButton reconnectButton;
+    private javax.swing.JButton sendButton;
+    private javax.swing.JTextField serialInputTextField;
     private javax.swing.JTextPane serialOutputTextPane;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
