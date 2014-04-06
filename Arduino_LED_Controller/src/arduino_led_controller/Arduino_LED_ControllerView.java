@@ -325,7 +325,9 @@ public class Arduino_LED_ControllerView extends FrameView {
         }
         serialInputTextField.setText("");
     }//GEN-LAST:event_sendButtonActionPerformed
-
+    
+    User32 user32 = (User32) Native.loadLibrary("user32", User32.class);
+    
     // Determine the desktop background's image so the average color may be
     // calculated and sent to the Arduino
     private void backgroundRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backgroundRadioButtonActionPerformed
@@ -333,8 +335,7 @@ public class Arduino_LED_ControllerView extends FrameView {
         {
             try
             {
-                User32 user32 = (User32) Native.loadLibrary("user32", User32.class);
-                Pointer path = new Memory(Pointer.SIZE);
+                Pointer path = new Memory(300);
                 user32.SystemParametersInfoA(User32.SPI_GETDESKWALLPAPER, 300, path, 0);
 
                 if (path.getString(0).length() > 0)
