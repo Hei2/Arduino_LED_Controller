@@ -1,7 +1,3 @@
-/*
- * Arduino_LED_ControllerApp.java
- */
-
 package arduino_led_controller;
 
 import org.jdesktop.application.Application;

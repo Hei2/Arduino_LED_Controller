@@ -1,9 +1,8 @@
-/*
- * Arduino_LED_ControllerView.java
- */
-
 package arduino_led_controller;
 
+import com.sun.jna.Memory;
+import com.sun.jna.Native;
+import com.sun.jna.Pointer;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
@@ -15,6 +14,7 @@ import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  * The application's main frame.
@@ -112,6 +112,7 @@ public class Arduino_LED_ControllerView extends FrameView {
         serialInputTextField = new javax.swing.JTextField();
         sendButton = new javax.swing.JButton();
         jTextField2 = new javax.swing.JTextField();
+        backgroundRadioButton = new javax.swing.JRadioButton();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
@@ -176,6 +177,14 @@ public class Arduino_LED_ControllerView extends FrameView {
         jTextField2.setFocusable(false);
         jTextField2.setName("jTextField2"); // NOI18N
 
+        backgroundRadioButton.setText(resourceMap.getString("backgroundRadioButton.text")); // NOI18N
+        backgroundRadioButton.setName("backgroundRadioButton"); // NOI18N
+        backgroundRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backgroundRadioButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -183,6 +192,7 @@ public class Arduino_LED_ControllerView extends FrameView {
             .addGroup(mainPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(backgroundRadioButton)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
                         .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -199,7 +209,9 @@ public class Arduino_LED_ControllerView extends FrameView {
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, mainPanelLayout.createSequentialGroup()
-                .addContainerGap(117, Short.MAX_VALUE)
+                .addContainerGap(87, Short.MAX_VALUE)
+                .addComponent(backgroundRadioButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -314,6 +326,46 @@ public class Arduino_LED_ControllerView extends FrameView {
         serialInputTextField.setText("");
     }//GEN-LAST:event_sendButtonActionPerformed
 
+    // Determine the desktop background's image so the average color may be
+    // calculated and sent to the Arduino
+    private void backgroundRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backgroundRadioButtonActionPerformed
+        if (backgroundRadioButton.isSelected())
+        {
+            try
+            {
+                User32 user32 = (User32) Native.loadLibrary("user32", User32.class);
+                Pointer path = new Memory(Pointer.SIZE);
+                user32.SystemParametersInfoA(User32.SPI_GETDESKWALLPAPER, 300, path, 0);
+
+                if (path.getString(0).length() > 0)
+                {
+                    System.out.println("Got the path: " + path.getString(0));
+                    /*try
+                    {
+                        BufferedImage img = null;
+                        img = ImageIO.read(new File(path.getString(0)));
+                        System.out.println("RBG int: " + img.getRGB(0, 0));
+                    }
+                    catch (IOException ex)
+                    {
+                        Logger.getLogger(Arduino_LED_ControllerView.class.getName()).log(Level.SEVERE, null, ex);
+                    }*/
+                }
+                else
+                {
+                    System.out.println("Didn't get a path");
+                    JFrame frame = new JFrame();
+                    JOptionPane.showMessageDialog(frame, "Image not found.", "Image error", JOptionPane.ERROR_MESSAGE);
+                    backgroundRadioButton.setSelected(false);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.out.println(ex.toString());
+            }
+        }
+    }//GEN-LAST:event_backgroundRadioButtonActionPerformed
+
     public void updateSerialOutputTextPane(String s)
     {
         serialOutputTextPane.setText(serialOutputTextPane.getText() + "\n" + s);
@@ -333,6 +385,7 @@ public class Arduino_LED_ControllerView extends FrameView {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton backgroundRadioButton;
     private javax.swing.JButton connectButton;
     private javax.swing.JButton disconnectButton;
     private javax.swing.JScrollPane jScrollPane1;
